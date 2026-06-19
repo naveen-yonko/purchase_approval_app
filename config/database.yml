@@ -85,6 +85,18 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+
+# Credentials , api keys should never be hardcoded because secrets can be revealed and leads to misuse of data
+# through source code. Environment variables keep our data secure as they are not stored in the source code
+# and allow different values for each environment which can be useful for modification and management also.
+
+staging:
+  <<: *default
+  database: purchase_approval_app_staging
+  username: <%= ENV.fetch("STAGING_DB_USERNAME") %>
+  password: <%= ENV.fetch("STAGING_DB_PASSWORD") %>
+
+
 production:
   primary: &primary_production
     <<: *default
