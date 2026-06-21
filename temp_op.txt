@@ -1,152 +1,88 @@
-\purchase_approval_app> rails console
-Loading development environment (Rails 8.1.3)
-purchase-approval-app(dev):001> yokes  = User.create!(  name: "Yokeshwar",  email: "yokesh@gmail.com",  role: :requester)                                                                                     
-  TRANSACTION (0.6ms)  BEGIN /*application='PurchaseApprovalApp'*/                                     
-  User Exists? (7.7ms)  SELECT 1 AS one FROM "users" WHERE "users"."email" = 'yokesh@gmail.com' LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                 
-  User Create (13.0ms)  INSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Yokeshwar', 'yokesh@gmail.com', 0, '2026-06-21 16:13:32.964066', '2026-06-21 16:13:32.964066') RETURNING "id" /*application='PurchaseApprovalApp'*/                                                       
-  TRANSACTION (2.0ms)  COMMIT /*application='PurchaseApprovalApp'*/                                    
-=>                                                                                                     
-#<User:0x000001dcd6084e18                                                                              
-...                                                                                                    
-purchase-approval-app(dev):002> alice.requester?                                                       
-(purchase-approval-app):2:in '<main>': undefined local variable or method 'alice' for main (NameError)
-purchase-approval-app(dev):003> yokes.requester?                                                       
-=> true                                                                                                
-purchase-approval-app(dev):004> User.all                                                               
-  User Load (149.1ms)  SELECT "users".* FROM "users" /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/                                                                                      
-=>                                                                                                     
-[#<User:0x000001dcd730f290
-  id: 1,
-  name: "Alice Kumar",
-  email: "[FILTERED]",
-  role: "requester",
-  created_at: "2026-06-19 18:22:20.899526000 +0000",
-  updated_at: "2026-06-19 18:22:20.899526000 +0000">,
- #<User:0x000001dcd730f150
-  id: 2,
-  name: "Bob Singh",
-  email: "[FILTERED]",
-  role: "approver",
-  created_at: "2026-06-19 18:36:43.657088000 +0000",
-  updated_at: "2026-06-19 18:36:43.657088000 +0000">,
- #<User:0x000001dcd730f010
-  id: 3,
-  name: "Yokeshwar",
-  email: "[FILTERED]",
-  role: "requester",
-  created_at: "2026-06-21 16:13:32.964066000 +0000",
-  updated_at: "2026-06-21 16:13:32.964066000 +0000">]
-purchase-approval-app(dev):005>                                                                        
- *  History restored 
-
-\purchase_approval_app> rails console
-Loading development environment (Rails 8.1.3)
-purchase-approval-app(dev):001> user.all                                                               
-(purchase-approval-app):1:in '<main>': undefined local variable or method 'user' for main (NameError)  
-Did you mean?  super                                                                                   
-purchase-approval-app(dev):002> User.all                                                               
-  User Load (182.3ms)  SELECT "users".* FROM "users" /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/                                                                                      
-=>                                                                                                     
-[#<User:0x000001e84567f500                                                                             
-  id: 1,                                                                                               
-  name: "Alice Kumar",                                                                                 
-  email: "[FILTERED]",                                                                                 
-  role: "requester",
-  created_at: "2026-06-19 18:22:20.899526000 +0000",
-  updated_at: "2026-06-19 18:22:20.899526000 +0000">,
- #<User:0x000001e843976558
-  id: 2,
-  name: "Bob Singh",
-  email: "[FILTERED]",
-  role: "approver",
-  created_at: "2026-06-19 18:36:43.657088000 +0000",
-  updated_at: "2026-06-19 18:36:43.657088000 +0000">,
- #<User:0x000001e843976418
-  id: 3,
-  name: "Yokeshwar",
-  email: "[FILTERED]",
-  role: "requester",
-  created_at: "2026-06-21 16:13:32.964066000 +0000",
-  updated_at: "2026-06-21 16:13:32.964066000 +0000">]
-purchase-approval-app(dev):003> jon = User.create!(name: "janathan ",   email: "jonathan@gmail.com",   role: :admin)                                                                                          
-  TRANSACTION (0.4ms)  BEGIN /*application='PurchaseApprovalApp'*/                                     
-  User Exists? (2.0ms)  SELECT 1 AS one FROM "users" WHERE "users"."email" = 'jonathan@gmail.com' LIMIT 1 /*application='PurchaseApprovalApp'*/                                                               
-  User Create (1.4ms)  INSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('janathan ', 'jonathan@gmail.com', 2, '2026-06-21 16:39:32.923377', '2026-06-21 16:39:32.923377') RETURNING "id" /*application='PurchaseApprovalApp'*/
-  TRANSACTION (8.3ms)  COMMIT /*application='PurchaseApprovalApp'*/
-=> 
-#<User:0x000001e8406885d8
-...
-purchase-approval-app(dev):004> jon.admin?                                                             
-=> true                                                                                                
-purchase-approval-app(dev):005> jon.requester?                                                         
-=> false                                                                                               
-purchase-approval-app(dev):006> jon.role                                                               
-=> "admin"                                                                                             
-purchase-approval-app(dev):007> jon.role_previously_changed?                                           
-=> true                                                                                                
-purchase-approval-app(dev):008> yokes  = User.find_by(email: "yokeshwar@gmail.com")                    
-  User Load (0.7ms)  SELECT "users".* FROM "users" WHERE "users"."email" = 'yokeshwar@gmail.com' LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                
+purchase-approval-app(dev):011> reload!                                                                
+Reloading...                                                                                           
 => nil                                                                                                 
-purchase-approval-app(dev):009> yokes.admin!                                                           
-(purchase-approval-app):9:in '<main>': undefined method 'admin!' for nil (NoMethodError)               
-purchase-approval-app(dev):010> yokes.approver!                                                        
-(purchase-approval-app):10:in '<main>': undefined method 'approver!' for nil (NoMethodError)           
-purchase-approval-app(dev):011> yokes.role                                                             
-(purchase-approval-app):11:in '<main>': undefined method 'role' for nil (NoMethodError)                
-purchase-approval-app(dev):012> yokes.role?                                                            
-(purchase-approval-app):12:in '<main>': undefined method 'role?' for nil (NoMethodError)               
-purchase-approval-app(dev):013> User.all                                                               
-  User Load (1.0ms)  SELECT "users".* FROM "users" /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/                                                                                        
-=>                                                                                                     
-[#<User:0x000001e846d7f8e0                                                                             
-  id: 1,
-  name: "Alice Kumar",
-  email: "[FILTERED]",
-  role: "requester",
-  created_at: "2026-06-19 18:22:20.899526000 +0000",
-  updated_at: "2026-06-19 18:22:20.899526000 +0000">,
- #<User:0x000001e846d7f7a0
-  id: 2,
-  name: "Bob Singh",
-  email: "[FILTERED]",
-  role: "approver",
-  created_at: "2026-06-19 18:36:43.657088000 +0000",
-  updated_at: "2026-06-19 18:36:43.657088000 +0000">,
- #<User:0x000001e846d7f660
-  id: 3,
-  name: "Yokeshwar",
-  email: "[FILTERED]",
-  role: "requester",
-  created_at: "2026-06-21 16:13:32.964066000 +0000",
-  updated_at: "2026-06-21 16:13:32.964066000 +0000">,
- #<User:0x000001e846d7f520
+purchase-approval-app(dev):012> yokes  = User.find_by(name: "Yokeshwar")                               
+  User Load (2.6ms)  SELECT "users".* FROM "users" WHERE "users"."name" = 'Yokeshwar' LIMIT 1 /*application='PurchaseApprovalApp'*/
+=> 
+#<User:0x000001fb5420d7c0
+...
+purchase-approval-app(dev):013> User.admin                                                             
+  User Load (0.7ms)  SELECT "users".* FROM "users" WHERE "users"."role" = 2 /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/
+=> 
+[#<User:0x000001fb4f3e57a0
   id: 4,
   name: "janathan ",
   email: "[FILTERED]",
   role: "admin",
   created_at: "2026-06-21 16:39:32.923377000 +0000",
-  updated_at: "2026-06-21 16:39:32.923377000 +0000">]
-purchase-approval-app(dev):014>                                                                        
-^C
-purchase-approval-app(dev):014> yokes  = User.find_by(name: "Yokeshwar")                               
-  User Load (0.7ms)  SELECT "users".* FROM "users" WHERE "users"."name" = 'Yokeshwar' LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                           
-=>                                                                                                     
-#<User:0x000001e846d720a0                                                                              
-...
-purchase-approval-app(dev):015> yokes.role?                                                            
-=> true                                                                                                
-purchase-approval-app(dev):016> yokes.role                                                             
-=> "requester"                                                                                         
-purchase-approval-app(dev):017> yokes.approver!                                                        
-  TRANSACTION (0.4ms)  BEGIN /*application='PurchaseApprovalApp'*/                                     
-  User Exists? (0.8ms)  SELECT 1 AS one FROM "users" WHERE "users"."email" = 'yokesh@gmail.com' AND "users"."id" != 3 LIMIT 1 /*application='PurchaseApprovalApp'*/                                           
-  User Update (7.6ms)  UPDATE "users" SET "role" = 1, "updated_at" = '2026-06-21 16:45:19.685284' WHERE "users"."id" = 3 /*application='PurchaseApprovalApp'*/
-  TRANSACTION (1.0ms)  COMMIT /*application='PurchaseApprovalApp'*/
+  updated_at: "2026-06-21 16:39:32.923377000 +0000",
+  status: "active">]
+purchase-approval-app(dev):014> alice  = User.find_by(name: "Alice Kumar")                                                             
+  User Load (1.1ms)  SELECT "users".* FROM "users" WHERE "users"."name" = 'Alice Kumar' LIMIT 1 /*application='PurchaseApprovalApp'*/  
+=>                                                                                                                                     
+#<User:0x000001fb4f3ebba0                                                                                                              
+...                                                                                                                                    
+purchase-approval-app(dev):015> alice.status_active?                                                                                   
+=> true                                                                                                                                
+purchase-approval-app(dev):016> alice.status_inactive?                                                                                 
+=> false                                                                                                                               
+purchase-approval-app(dev):017> alice.status_inactive!                                                                                 
+  TRANSACTION (0.4ms)  BEGIN /*application='PurchaseApprovalApp'*/                                                                     
+  User Exists? (0.5ms)  SELECT 1 AS one FROM "users" WHERE "users"."email" = 'alice@zapro.com' AND "users"."id" != 1 LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                                                            
+  User Update (7.8ms)  UPDATE "users" SET "updated_at" = '2026-06-21 17:42:13.269959', "status" = 1 WHERE "users"."id" = 1 /*application='PurchaseApprovalApp'*/
+  TRANSACTION (1.5ms)  COMMIT /*application='PurchaseApprovalApp'*/
 => true
-purchase-approval-app(dev):018> yokes.role                                                             
-=> "approver"                                                                                          
-purchase-approval-app(dev):019> yokerole_before_type_cast                                              
-(purchase-approval-app):19:in '<main>': undefined local variable or method 'yokerole_before_type_cast' for main (NameError)                                                                                   
-purchase-approval-app(dev):020> yokes.role_before_type_cast                                            
-=> 1                                                                                                   
-purchase-approval-app(dev):021> 
+purchase-approval-app(dev):018> alice.status_inactive?                                                                                 
+=> true                                                                                                                                
+purchase-approval-app(dev):019> alice.status_active?                                                                                   
+=> false
+purchase-approval-app(dev):020> User.status_active                                                                                     
+  User Load (0.7ms)  SELECT "users".* FROM "users" WHERE "users"."status" = 0 /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/                                                                                                                             
+=>                                                                                                                                     
+[#<User:0x000001fb536fd498                                                                                                             
+  id: 2,                                                                                                                               
+  name: "Bob Singh",
+  email: "[FILTERED]",
+  role: "approver",
+  created_at: "2026-06-19 18:36:43.657088000 +0000",
+  updated_at: "2026-06-19 18:36:43.657088000 +0000",
+  status: "active">,
+ #<User:0x000001fb536fd358
+  id: 4,
+  name: "janathan ",
+  email: "[FILTERED]",
+  role: "admin",
+  created_at: "2026-06-21 16:39:32.923377000 +0000",
+  updated_at: "2026-06-21 16:39:32.923377000 +0000",
+  status: "active">,
+ #<User:0x000001fb536fd218
+  id: 3,
+  name: "Yokeshwar",
+  email: "[FILTERED]",
+  role: "approver",
+  created_at: "2026-06-21 16:13:32.964066000 +0000",
+  updated_at: "2026-06-21 16:45:19.685284000 +0000",
+  status: "active">]
+purchase-approval-app(dev):021> User.status_inactive                                                                                   
+  User Load (0.8ms)  SELECT "users".* FROM "users" WHERE "users"."status" = 1 /* loading for pp */ LIMIT 11 /*application='PurchaseApprovalApp'*/                                                                                                                             
+=>                                                                                                                                     
+[#<User:0x000001fb536fa658
+  id: 1,
+  name: "Alice Kumar",
+  email: "[FILTERED]",
+  role: "requester",
+  created_at: "2026-06-19 18:22:20.899526000 +0000",
+  updated_at: "2026-06-21 17:42:13.269959000 +0000",
+  status: "inactive">]
+purchase-approval-app(dev):022>   
+
+
+purchase_approval_app_development=# SELECT * FROM users;
+ id |    name     |       email        | role |         created_at         |         updated_at         | status                      
+----+-------------+--------------------+------+----------------------------+----------------------------+--------
+  2 | Bob Singh   | bob@zapro.com      |    1 | 2026-06-19 18:36:43.657088 | 2026-06-19 18:36:43.657088 |      0
+  4 | janathan    | jonathan@gmail.com |    2 | 2026-06-21 16:39:32.923377 | 2026-06-21 16:39:32.923377 |      0
+  3 | Yokeshwar   | yokesh@gmail.com   |    1 | 2026-06-21 16:13:32.964066 | 2026-06-21 16:45:19.685284 |      0
+  1 | Alice Kumar | alice@zapro.com    |    0 | 2026-06-19 18:22:20.899526 | 2026-06-21 17:42:13.269959 |      1
+
+  
