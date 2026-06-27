@@ -9,6 +9,8 @@ class User < ApplicationRecord
     inactive: 1,
     suspended: 2
   },prefix: true
+
+  has_many:purchase_request
 #without prefix, it will create methods like active?, inactive?, suspended? but it will cause conflict with others enums if they have same name to solve this we are using that prefix which makes the methods like status_active?, 
   validates :name, presence: true
 
@@ -19,7 +21,8 @@ class User < ApplicationRecord
   validates :role, presence: true
 
   validates :status, presence: true
-end
+
+
 
 # we can also solve this without prefix by using this insted of prefix   instance_methods: false
 # and by using custom methods
@@ -33,4 +36,6 @@ def active?
   end
 
   we can now call like this User.active? 
-  =end
+=end
+
+end
