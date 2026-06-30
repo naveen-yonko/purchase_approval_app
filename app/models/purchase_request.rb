@@ -1,6 +1,6 @@
 class PurchaseRequest < ApplicationRecord
 
-  belongs_to :user
+  belongs_to :user # singular  Inflector handles this it search on its own table for col with _id for the given name i.e user
 
   enum :status, {
     draft: 0,

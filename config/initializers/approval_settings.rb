@@ -1,0 +1,3 @@
+APPROVAL_SETTINGS = YAML.load_file(
+Rails.root.join("config", "approval_settings.yml")
+).with_indifferent_access
