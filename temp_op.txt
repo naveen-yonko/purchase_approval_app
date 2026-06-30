@@ -1,104 +1,41 @@
-rails console                                                               
+ rails console
 Loading development environment (Rails 8.1.3)
-purchase-approval-app(dev):001>                                                                                                        
-purchase-approval-app(dev):002> 
-purchase-approval-app(dev):003> pr = PurchaseRequest.last                                                                              
-  PurchaseRequest Load (6.1ms)  SELECT "purchase_requests".* FROM "purchase_requests" ORDER BY "purchase_requests"."id" DESC LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                                                    
+purchase-approval-app(dev):001>                                                                                                                                        
+purchase-approval-app(dev):002> APPROVAL_SETTINGS                                                                                                                      
 => 
-#<PurchaseRequest:0x0000025f4e858e50
-...
-purchase-approval-app(dev):004> pr.status                                                                                              
-=> "submitted"                                                                                                                         
-purchase-approval-app(dev):005> pr.status_changed?                                                                                     
-=> false                                                                                                                               
-purchase-approval-app(dev):006> pr.approved!                                                                                           
-  TRANSACTION (0.5ms)  BEGIN /*application='PurchaseApprovalApp'*/                                                                     
-  PurchaseRequest Update (3.7ms)  UPDATE "purchase_requests" SET "status" = 2, "updated_at" = '2026-06-27 17:47:51.715032' WHERE "purchase_requests"."id" = 5 /*application='PurchaseApprovalApp'*/                                                                           
-PurchaseRequest #5 saved (status: approved)
-PurchaseRequest #5: submitted -> approved
-  TRANSACTION (1.3ms)  COMMIT /*application='PurchaseApprovalApp'*/
-PurchaseRequest #5 committed to DB
-=> true
-purchase-approval-app(dev):007>
+{"approval" =>
+  {"auto_approve_below" => 100,
+   "max_amount" => 50000,
+   "default_currency" => "USD",
+   "notify_approver_on_submit" => true,
+   "roles_that_can_approve" => ["approver", "admin"]}}
+purchase-approval-app(dev):003> APPROVAL_SETTINGS[:approval][:auto_approve_below]                                                                                      
+=> 100                                                                                                                                                                 
+purchase-approval-app(dev):004> reload!                                                                                                                                
+Reloading...                                                                                                                                                           
+=> nil                                             
 
 
-purchase_approval_app_development=# select * from purchase_requests;
-
- id |    title     |     description      |  amount  | status | user_id |         created_at         |         updated_at             
-----+--------------+----------------------+----------+--------+---------+----------------------------+----------------------------
-  1 | Laptop       |                      |  50000.0 |      0 |       1 | 2026-06-24 17:15:05.512356 | 2026-06-24 17:15:05.512356
-  2 | Laptop       |                      |    500.0 |      0 |       1 | 2026-06-24 17:16:07.510782 | 2026-06-24 17:16:07.510782
-  3 | Lap          |                      |    500.0 |      0 |       1 | 2026-06-24 17:16:12.774858 | 2026-06-24 17:16:12.774858
-  4 | MacBook      | Requesting a lap     | 245000.0 |      0 |       4 | 2026-06-27 09:33:47.765955 | 2026-06-27 09:33:47.765955
-  5 | MacBook pro  | Requesting a new_lap | 295000.0 |      2 |       4 | 2026-06-27 09:39:04.781348 | 2026-06-27 17:47:51.715032
-(5 rows)
+purchase_approval_app_development=# select * from Users; 
+ id |    name     |      email      | role |         created_at         |         updated_at         | status                                                         
+----+-------------+-----------------+------+----------------------------+----------------------------+--------
+  8 | Alice Kumar | alice@zapro.com |    0 | 2026-06-30 16:18:05.080373 | 2026-06-30 16:18:05.080373 |      0
+  9 | Bob Singh   | bob@zapro.com   |    1 | 2026-06-30 16:18:05.102485 | 2026-06-30 16:18:05.102485 |      0
+ 10 | Carol Patel | carol@zapro.com |    2 | 2026-06-30 16:18:05.119715 | 2026-06-30 16:18:05.119715 |      0
+(3 rows)
 
 
-purchase-approval-app(dev):007> pr = PurchaseRequest.find(3)                                                                           
-  PurchaseRequest Load (138.1ms)  SELECT "purchase_requests".* FROM "purchase_requests" WHERE "purchase_requests"."id" = 3 LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                                                      
-=>                                                                                                                                     
-#<PurchaseRequest:0x0000025f4c6c8c18
-...
-purchase-approval-app(dev):008> pr.status                                                                                              
-=> "draft"                                                                                                                             
-purchase-approval-app(dev):009> pr.approved?                                                                                           
-=> false                                                                                                                               
-purchase-approval-app(dev):010> pr.approved!                                                                                           
-  TRANSACTION (0.5ms)  BEGIN /*application='PurchaseApprovalApp'*/                                                                     
-  PurchaseRequest Update (3.1ms)  UPDATE "purchase_requests" SET "status" = 2, "updated_at" = '2026-06-27 17:58:09.950524' WHERE "purchase_requests"."id" = 3 /*application='PurchaseApprovalApp'*/
-PurchaseRequest #3 saved (status: approved)
-PurchaseRequest #3: draft -> approved
-  TRANSACTION (1.8ms)  COMMIT /*application='PurchaseApprovalApp'*/
-PurchaseRequest #3 committed to DB
-=> true
-purchase-approval-app(dev):011> pr.status                                                                                              
-=> "approved"                                                                                                                          
-purchase-approval-app(dev):012>                                                                                                        
-purchase-approval-app(dev):013> pr.status_changed?                                                                                     
-=> false                                                                                                                               
-purchase-approval-app(dev):014> pr.status_previously_changed?                                                                          
-=> true                                                                                                                                
-
-purchase_approval_app_development=# select * from purchase_requests;
- id |    title     |     description      |  amount  | status | user_id |         created_at         |         updated_at             
-----+--------------+----------------------+----------+--------+---------+----------------------------+----------------------------
-  1 | Laptop       |                      |  50000.0 |      0 |       1 | 2026-06-24 17:15:05.512356 | 2026-06-24 17:15:05.512356
-  2 | Laptop       |                      |    500.0 |      0 |       1 | 2026-06-24 17:16:07.510782 | 2026-06-24 17:16:07.510782
-  4 | MacBook      | Requesting a lap     | 245000.0 |      0 |       4 | 2026-06-27 09:33:47.765955 | 2026-06-27 09:33:47.765955
-  5 | MacBook pro  | Requesting a new_lap | 295000.0 |      2 |       4 | 2026-06-27 09:39:04.781348 | 2026-06-27 17:47:51.715032
-  3 | Lap          |                      |    500.0 |      2 |       1 | 2026-06-24 17:16:12.774858 | 2026-06-27 17:58:09.950524
-(5 rows)
-
-purchase-approval-app(dev):015> reload!                                                                                                
-Reloading...                                                                                                                           
-=> nil                                                                                                                                 
-purchase-approval-app(dev):016> pr = PurchaseRequest.find(3)                                                                           
-  PurchaseRequest Load (0.7ms)  SELECT "purchase_requests".* FROM "purchase_requests" WHERE "purchase_requests"."id" = 3 LIMIT 1 /*application='PurchaseApprovalApp'*/                                                                                                        
-=>                                                                                                                                     
-#<PurchaseRequest:0x0000025f4fd38f50
-...
-purchase-approval-app(dev):017> pr.status                                                                                              
-=> "approved"                                                                                                                          
-purchase-approval-app(dev):018> pr.submitted!                                                                                          
-  TRANSACTION (0.4ms)  BEGIN /*application='PurchaseApprovalApp'*/                                                                     
-  PurchaseRequest Update (1.3ms)  UPDATE "purchase_requests" SET "status" = 1, "updated_at" = '2026-06-27 18:00:36.398334' WHERE "purchase_requests"."id" = 3 /*application='PurchaseApprovalApp'*/                                                                           
-PurchaseRequest #3 saved (status: submitted)
-PurchaseRequest #3: approved -> submitted
-  TRANSACTION (2.3ms)  COMMIT /*application='PurchaseApprovalApp'*/
-PurchaseRequest #3 committed to DB{purchase_requests} 
-=> true
-purchase_approval_app_development=# select * from purchase_requests;
- id |    title     |     description      |  amount  | status | user_id |         created_at         |         updated_at             
-----+--------------+----------------------+----------+--------+---------+----------------------------+----------------------------
-  1 | Laptop       |                      |  50000.0 |      0 |       1 | 2026-06-24 17:15:05.512356 | 2026-06-24 17:15:05.512356
-  2 | Laptop       |                      |    500.0 |      0 |       1 | 2026-06-24 17:16:07.510782 | 2026-06-24 17:16:07.510782
-  4 | MacBook      | Requesting a lap     | 245000.0 |      0 |       4 | 2026-06-27 09:33:47.765955 | 2026-06-27 09:33:47.765955
-  5 | MacBook pro  | Requesting a new_lap | 295000.0 |      2 |       4 | 2026-06-27 09:39:04.781348 | 2026-06-27 17:47:51.715032
-  3 | Lap          |                      |    500.0 |      1 |       1 | 2026-06-24 17:16:12.774858 | 2026-06-27 18:00:36.398334
-(5 rows)
-
-
-
-#Notes -- remember
-#before_validation -> set_default_status -> validation -> INSERT INTO purchase_requests -> after_create -> log_creation -> after_save -> (log_save & notify_on_status_change) -> COMMIT -> after_commit -> log_commit
-# so see save is before commit and after commit only the db gets updatead
+purchase_approval_app_development=# select * from Purchase_Requests;
+ id |           title           |            description            | amount | status | user_id |         created_at         |         updated_at                     
+----+---------------------------+-----------------------------------+--------+--------+---------+----------------------------+----------------------------
+  6 | Mediocre Paper Shoes      | Aut esse non voluptatem.          | 8949.0 |      0 |       8 | 2026-06-30 16:18:32.606802 | 2026-06-30 16:18:32.606802
+  7 | Small Iron Chair          | Impedit voluptas cum saepe.       | 8492.0 |      0 |       8 | 2026-06-30 16:18:32.675646 | 2026-06-30 16:18:32.675646
+  8 | Rustic Aluminum Clock     | Quibusdam enim dolore ratione.    |  293.0 |      0 |       8 | 2026-06-30 16:18:32.721787 | 2026-06-30 16:18:32.721787
+  9 | Aerodynamic Silk Watch    | Et et modi necessitatibus.        | 1732.0 |      0 |       8 | 2026-06-30 16:18:32.769426 | 2026-06-30 16:18:32.769426
+ 10 | Sleek Silk Watch          | Tenetur velit ut laudantium.      |  147.0 |      0 |       8 | 2026-06-30 16:18:32.818103 | 2026-06-30 16:18:32.818103
+ 11 | Durable Cotton Chair      | Laborum eius reprehenderit harum. | 2627.0 |      0 |       8 | 2026-06-30 16:18:32.866445 | 2026-06-30 16:18:32.866445
+ 12 | Gorgeous Paper Bottle     | Et ut dolorum ut.                 | 2620.0 |      0 |       8 | 2026-06-30 16:18:32.909286 | 2026-06-30 16:18:32.909286
+ 13 | Synergistic Rubber Knife  | Quaerat hic ut quas.              | 2839.0 |      0 |       8 | 2026-06-30 16:18:32.954568 | 2026-06-30 16:18:32.954568
+ 14 | Aerodynamic Concrete Coat | Dolore aut vel laboriosam.        | 1121.0 |      0 |       8 | 2026-06-30 16:18:33.002015 | 2026-06-30 16:18:33.002015
+ 15 | Awesome Wooden Coat       | Ullam et corrupti beatae.         | 6109.0 |      0 |       8 | 2026-06-30 16:18:33.053007 | 2026-06-30 16:18:33.053007
+(10 rows)

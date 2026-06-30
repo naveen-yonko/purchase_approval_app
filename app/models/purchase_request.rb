@@ -8,7 +8,14 @@ class PurchaseRequest < ApplicationRecord
     approved: 2,
     rejected: 3
   }
-  validates :title,  presence: true
+  validates :title,
+          length: {
+            maximum: APPROVAL_SETTINGS.dig(:approval,:max_title_length) # or APPROVAL_SETTINGS[:approval][:max_title_length]
+          }
+
+          # If the company needs to change the limit they don't need to modify the application code and change the value in multiple places across code
+          # instead they can change in the configuration without changing the application code
+          # so based on business requirements we can change the values instead of changing on code it is easier and safer as it reducing the risk of introducing bugs.
   validates :amount, presence: true, numericality: { greater_than: 0 }
 
   before_validation :set_default_status
