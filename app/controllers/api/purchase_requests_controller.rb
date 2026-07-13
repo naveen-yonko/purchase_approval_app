@@ -4,6 +4,8 @@ class Api::PurchaseRequestsController < ApplicationController
 
   before_action :set_current_user
 
+  before_action :validate_amount_limit, only: [:create]
+
   after_action :log_response
 
   around_action :measure_time, only: [:index]
@@ -106,6 +108,15 @@ class Api::PurchaseRequestsController < ApplicationController
 
   def set_current_user
     @current_user = User.find_by(id: params[:user_id]) || User.first
+  end
+
+  def validate_amount_limit
+    amount = params[:purchase_request][:amount].to_f
+    max_amount = APPROVAL_SETTINGS.dig(:approval, :max_amount)
+    if amount > max_amount
+      render json: {status: "failure",message: "Amount exceeds the maximum allowed"}, status: :unprocessable_entity
+      return #to prevent unwanted func execution
+    end
   end
 
   def log_response
