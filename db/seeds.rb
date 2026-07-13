@@ -18,7 +18,7 @@ carol = User.create!(name: "Carol Patel", email: "carol@zapro.com", role: :admin
 10.times do
   alice.purchase_request.create!(title:Faker::Commerce.product_name,       
   description: Faker::Lorem.sentence,
-  amount:      Faker::Commerce.price(range: 100..10000))
+  amount: Faker::Commerce.price(range: 100..10000))
 end
 
 puts "Seeded #{User.count} users, #{PurchaseRequest.count} purchase requests"

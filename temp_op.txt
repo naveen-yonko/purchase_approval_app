@@ -39,3 +39,50 @@ purchase_approval_app_development=# select * from Purchase_Requests;
  14 | Aerodynamic Concrete Coat | Dolore aut vel laboriosam.        | 1121.0 |      0 |       8 | 2026-06-30 16:18:33.002015 | 2026-06-30 16:18:33.002015
  15 | Awesome Wooden Coat       | Ullam et corrupti beatae.         | 6109.0 |      0 |       8 | 2026-06-30 16:18:33.053007 | 2026-06-30 16:18:33.053007
 (10 rows)
+
+
+day 14 
+
+ rails console                                                                                                    
+Loading development environment (Rails 8.1.3)                                                                                                                          
+purchase-approval-app(dev):001> reload!                                                                                                                                
+Reloading...                                                                                                                                                           
+=> nil                                                                                                                                                                 
+purchase-approval-app(dev):002> alice = User.first                                                                                                                     
+  User Load (1.8ms)  SELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT 1 /*application='PurchaseApprovalApp'*/                                             
+=>                                                                                                                                                                     
+#<User:0x00000119a48246f0                                                                                                                                              
+...
+purchase-approval-app(dev):003> alice.purchase_requests.create!(title: "...", description: "qwertyuiop", amount: 10000)                                                
+  TRANSACTION (0.2ms)  BEGIN /*application='PurchaseApprovalApp'*/
+  PurchaseRequest Create (2.6ms)  INSERT INTO "purchase_requests" ("title", "description", "amount", "status", "user_id", "created_at", "updated_at") VALUES ('...', 'qwertyuiop', 10000.0, 0, 8, '2026-06-30 17:48:11.787145', '2026-06-30 17:48:11.787145') RETURNING "id" /*application='PurchaseApprovalApp'*/
+PurchaseRequest #16 created: ...
+PurchaseRequest #16 saved (status: draft)
+PurchaseRequest #16:  -> draft
+  TRANSACTION (2.9ms)  COMMIT /*application='PurchaseApprovalApp'*/
+PurchaseRequest #16 committed to DB{purchase_requests} 
+=> 
+#<PurchaseRequest:0x00000119a5f26010
+ id: 16,
+ title: "...",
+ description: "qwertyuiop",
+ amount: 0.1e5,
+ status: "draft",
+ user_id: 8,
+ created_at: "2026-06-30 17:48:11.787145000 +0000",
+ updated_at: "2026-06-30 17:48:11.787145000 +0000">
+purchase-approval-app(dev):004> alice.purchase_requests.create!(title: ".1234567890`12345678901234567890123456789012345678901123456789012345678901`23456789012345678901234567890123456789012345678901234567890-1234567890-wertyuiopasdfghjkl..", description: "qwertyuiop", amount: 10000)                                                    
+(purchase-approval-app):4:in '<main>': Validation failed: Title is too long (maximum is 100 characters) (ActiveRecord::RecordInvalid)
+purchase-approval-app(dev):005> 
+
+  6 | Mediocre Paper Shoes      | Aut esse non voluptatem.          |  8949.0 |      0 |       8 | 2026-06-30 16:18:32.606802 | 2026-06-30 16:18:32.606802
+  7 | Small Iron Chair          | Impedit voluptas cum saepe.       |  8492.0 |      0 |       8 | 2026-06-30 16:18:32.675646 | 2026-06-30 16:18:32.675646
+  8 | Rustic Aluminum Clock     | Quibusdam enim dolore ratione.    |   293.0 |      0 |       8 | 2026-06-30 16:18:32.721787 | 2026-06-30 16:18:32.721787
+  9 | Aerodynamic Silk Watch    | Et et modi necessitatibus.        |  1732.0 |      0 |       8 | 2026-06-30 16:18:32.769426 | 2026-06-30 16:18:32.769426
+ 10 | Sleek Silk Watch          | Tenetur velit ut laudantium.      |   147.0 |      0 |       8 | 2026-06-30 16:18:32.818103 | 2026-06-30 16:18:32.818103
+ 11 | Durable Cotton Chair      | Laborum eius reprehenderit harum. |  2627.0 |      0 |       8 | 2026-06-30 16:18:32.866445 | 2026-06-30 16:18:32.866445
+ 12 | Gorgeous Paper Bottle     | Et ut dolorum ut.                 |  2620.0 |      0 |       8 | 2026-06-30 16:18:32.909286 | 2026-06-30 16:18:32.909286
+ 13 | Synergistic Rubber Knife  | Quaerat hic ut quas.              |  2839.0 |      0 |       8 | 2026-06-30 16:18:32.954568 | 2026-06-30 16:18:32.954568
+ 14 | Aerodynamic Concrete Coat | Dolore aut vel laboriosam.        |  1121.0 |      0 |       8 | 2026-06-30 16:18:33.002015 | 2026-06-30 16:18:33.002015
+ 15 | Awesome Wooden Coat       | Ullam et corrupti beatae.         |  6109.0 |      0 |       8 | 2026-06-30 16:18:33.053007 | 2026-06-30 16:18:33.053007
+ 16 | ...                       | qwertyuiop                        | 10000.0 |      0 |       8 | 2026-06-30 17:48:11.787145 | 2026-06-30 17:48:11.787145 

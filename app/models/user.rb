@@ -10,9 +10,12 @@ class User < ApplicationRecord
     suspended: 2
   },prefix: true
 
-  has_many:purchase_requests,
-  dependent: :destroy # also use delete_all it is direct sql faster but destroy use callback 
-                        #has many {DB table name} cuz it checks with exact name on db 
+has_many :purchase_requests,
+         dependent: :destroy
+
+  
+  # also use delete_all it is direct sql faster but destroy use callback 
+  #has many {DB table name} cuz it checks with exact name on db 
 
 #without prefix, it will create methods like active?, inactive?, suspended? but it will cause conflict with others enums if they have same name to solve this we are using that prefix which makes the methods like status_active?, 
   validates :name, presence: true
